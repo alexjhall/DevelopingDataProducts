@@ -1,5 +1,99 @@
 ## Scratchpad file
 
+
+## Looking at Ballarat data and required cleaning.
+
+## ******************************************
+## Air pressure
+
+x <- air_pressure[air_pressure$atmospheric_pressure < 94, ]
+view(x)
+
+hist(air_pressure$vapour_pressure_hpa)
+
+range(air_pressure$vapour_pressure)
+
+
+## ******************************************
+## Air temp
+
+x <- air_temp[air_temp$air_temperature < 0, ]
+view(x)
+
+hist(air_temp$air_temperature)
+
+
+
+
+## ******************************************
+## Humidity
+
+x <- air_temp[air_temp$air_temperature < 0, ]
+view(x)
+
+hist(humidity$relative_humidity)
+
+range(air_pressure$vapour_pressure)
+
+
+## ******************************************
+## solar
+
+x <- air_temp[air_temp$air_temperature < 0, ]
+view(x)
+
+hist(solar$solar_radiation)
+
+# plot solar over time to find dead spot
+plot(x = solar_hour$date_time_hour, y = solar_hour$solar_radiation)
+
+
+
+## ******************************************
+## wind
+
+x <- air_temp[air_temp$air_temperature < 0, ]
+view(x)
+
+hist(wind$wind_direction)
+qplot(wind$wind_direction_cardinal)
+
+# plot solar over time to find dead spot
+plot(x = solar_hour$date_time_hour, y = solar_hour$solar_radiation)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## install package to investigate
 install.packages("worldfootballR")
 
