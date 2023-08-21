@@ -283,6 +283,55 @@ wind_hour <-
     )
 
 
+# ## Precipitation
+# ## *************************
+# rain <- data_list[["precipitation-observations.csv"]]
+# 
+# ## Turn date_time into datetime object
+# rain$date_time <- 
+#     lubridate::ymd_hms(substr(rain$date_time, 1, 20))
+# 
+# ## Force timezone
+# rain$date_time <- 
+#     force_tz(rain$date_time, tzone = "Australia/Sydney")
+# 
+# ## Sort data
+# rain <- rain %>% arrange(desc(date_time))
+# 
+# ## Select cols and filter to rowing
+# rain <-
+#     rain %>%
+#     filter(
+#         solar_radiation >=0,
+#         # 'dead spot' where solar collected as 0 night and day...
+#         (date_time < "2021-10-29" | date_time > "2023-03-17") 
+#     ) %>%
+#     select(
+#         -location_description,
+#         -latitude,
+#         -longitude,
+#         -point
+#     )
+# 
+# ## Mutate to correct 
+# 
+# 
+# ## Take mean by hour
+# rain_hour <- 
+#     rain %>%
+#     group_by(date_time_hour = floor_date(date_time, "1 hour")) %>%
+#     summarise(
+#         solar_radiation = mean(solar_radiation)
+#     ) %>%
+#     ungroup() %>%
+#     arrange(desc(date_time_hour))
+
+
+
+
+
+
+
 ## Merge datasets
 ## *************************
 
@@ -307,6 +356,32 @@ data <-
 data_complete <-
     data[complete.cases(data),]
 
+
+
+## Create additional time/month variables
+## *************************
+
+data_complete <- 
+    data_complete %>%
+    mutate(
+        hour_of_day = hour(date_time_hour),
+        time_of_day = case_when(
+            hour_of_day >= 0 & hour_of_day <= 6 ~ "Early morning",
+            hour_of_day > 6 & hour_of_day <= 10 ~ "Morning",
+            hour_of_day > 10 & hour_of_day <= 15 ~ "Noon",
+            hour_of_day > 15 & hour_of_day <= 20 ~ "Evening",
+            hour_of_day > 20 & hour_of_day <= 23 ~ "Night"
+        ),
+        month_of_year = month(date_time_hour),
+        season = case_when(
+            month_of_year >= 1 & month_of_year <= 2 ~ "Summer",
+            month_of_year > 2 & month_of_year <= 5 ~ "Autumn",
+            month_of_year > 5 & month_of_year <= 8 ~ "Winter"
+        )
+    )
+
+
+
 ## Some cleaning identified in scratchpad and implemented in individual filter steps for each dataset above.
 write.csv(
     data_complete, 
@@ -317,11 +392,29 @@ write.csv(
 
 
 
+## Reduced data
+data_reduc <-
+    data_complete %>%
+    select(
+        -date_time_hour,
+        -vapour_pressure_hpa,
+        -atmospheric_pressure_hpa,
+        -wind_direction_cardinal,
+        -hour_of_day,
+        -month_of_year,
+        -wind_speed_gust, ## Very similar to wind_speed_average
+        -solar_radiation ## Didn't add anything to model
+    )
 
-## Save to single csv. Load data for shiny app from here.
 
 
 
+## Some cleaning identified in scratchpad and implemented in individual filter steps for each dataset above.
+write.csv(
+    data_reduc, 
+    file = here("Shiny/Data/data.csv"),
+    row.names=FALSE
+)
 
 
 
