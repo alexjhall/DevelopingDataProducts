@@ -46,7 +46,7 @@ As would be expected, colouring the points by season shows that the lowest humid
 
 
 ```{r, echo = FALSE, warning=FALSE}
-source(here::here("Shiny/Packages.R"))
+source(here::here("Packages.R"))
 
 ## Load data
 data <-
@@ -69,7 +69,7 @@ data %>%
 
 Please use these links to access the app and for the github repository.
 
-- [R Shiny web application]()
+- [R Shiny web application](https://alexjhall.shinyapps.io/ddp_predicting_ballarat_temperature/)
 - [GitHub repository](https://github.com/alexjhall/DevelopingDataProducts)
     - Contains data sourcing and cleaning
     - model exploration
