@@ -66,8 +66,7 @@ model_to_test <- lm(air_temperature ~
                     vapour_pressure + 
                     atmospheric_pressure + 
                     relative_humidity +
-                    wind_direction +
-                    wind_speed_average,
+                    wind_direction,
                     data=data)
 
 ## summary
