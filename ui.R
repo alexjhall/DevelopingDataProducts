@@ -1,12 +1,10 @@
 ## UI file
 
 ## Load packages
-source(here::here("Shiny/Packages.R"))
-
-## Import data
-data <-
-    read_csv(here("Data/Ballarat/Clean/data.csv"))
-
+library(shiny)
+# library(tidyverse)
+library(here)
+library(readr)
 
 # Define UI for application that draws a histogram
 fluidPage(

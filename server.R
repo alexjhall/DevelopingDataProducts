@@ -2,17 +2,18 @@
 
 
 ## Load packages
-source(here::here("Shiny/Packages.R"))
+library(shiny)
+# library(tidyverse)
+library(here)
 
 
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
     
-    
     ## Import data
     data <-
-        read_csv(here("Data/Ballarat/Clean/data.csv"))
+        read_csv(here("data.csv"))
     
 
     
