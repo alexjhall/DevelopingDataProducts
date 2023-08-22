@@ -9,17 +9,90 @@ source(here::here("Shiny/Packages.R"))
 # Define server logic required to draw a histogram
 function(input, output, session) {
     
-    output$distPlot <- renderPlot({
+    
+    ## Import data
+    data <-
+        read_csv(here("Data/Ballarat/Clean/data.csv"))
+    
+
+    
+    ## Build model
+    model <- lm(air_temperature ~ 
+                wind_speed_average +
+                time_of_day +
+                season +
+                vapour_pressure + 
+                atmospheric_pressure + 
+                relative_humidity +
+                wind_direction,
+                data=data)
+    
+    
+    ## Make predictions from model
+    model_prediction <- reactive({
         
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+        ## Create dataframe based on ui inputs
+        input_df <-
+            data.frame(
+                wind_speed_average = input$wind_speed_average_input,
+                time_of_day = input$time_of_day_input,
+                season = input$season_input,
+                vapour_pressure = input$vapour_pressure_input,
+                atmospheric_pressure = input$atmospheric_pressure_input,
+                relative_humidity = input$relative_humidity_input,
+                wind_direction = input$wind_direction_input
+            )
         
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+        ## Make predictions
+        predict(
+            object = model,
+            newdata = input_df
+        )
         
     })
+    
+    ## Make predictions from model
+    model_prediction_interval <- reactive({
+        
+        ## Create dataframe based on ui inputs
+        input_df <-
+            data.frame(
+                wind_speed_average = input$wind_speed_average_input,
+                time_of_day = input$time_of_day_input,
+                season = input$season_input,
+                vapour_pressure = input$vapour_pressure_input,
+                atmospheric_pressure = input$atmospheric_pressure_input,
+                relative_humidity = input$relative_humidity_input,
+                wind_direction = input$wind_direction_input
+            )
+        
+        ## Make predictions
+        predict(
+            object = model,
+            newdata = input_df,
+            interval = "confidence"
+        )
+        
+    })
+    
+    
+    ## Output prediction value
+    output$predictedTemp <- renderText({
+        round(model_prediction(), 2)
+    })
+    
+    ## Output prediction interval - Lower
+    output$predictedTempIntervalLower <- renderText({
+        round(model_prediction_interval()[2], 2)
+    })
+    
+    ## Output prediction interval - Upper
+    output$predictedTempIntervalUpper <- renderText({
+        round(model_prediction_interval()[3], 2)
+    })
+    
+    
+    
+    
     
 }
