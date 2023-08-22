@@ -1,0 +1,13 @@
+name: ddp_predicting_ballarat_temperature
+title: ddp_predicting_ballarat_temperature
+username: alexjhall
+account: alexjhall
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9650914
+bundleId: 7595935
+url: https://alexjhall.shinyapps.io/ddp_predicting_ballarat_temperature/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Modelling_exploration.R|packages.R|README.md|Scratchpad.R|Wrangling.R|Data|Slides
