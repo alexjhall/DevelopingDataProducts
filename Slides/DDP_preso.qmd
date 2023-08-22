@@ -3,23 +3,78 @@ title: "Predicting Ballarat Lake Wendouree Temperature"
 subtitle: "Course project for Developing Data Products module of John Hopkins Data Science Specialisation"
 author: "Alex Hall"
 format: revealjs
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
 ---
 
 
-## Introduction
+## Introduction {.smaller}
+
+This pitch presentation represents one of two parts of a course project for the Developing Data Products module in the John Hopkins Data Science Specialisation course. The other part is a published R Shiny web application.
+
+The app serves as a proof of concept of what could be done with local government open data, specifically for Lake Wendouree in Ballarat, Victoria, Australia. It allows the user to predict the air temperature at the Lake, given a number of known independent variable values relating to the weather. This could be useful to know before taking a walk around the lake, or going to rowing practice.
+
+Of course, far more sophisticated weather forecasting models exist and are likely to be more useful that this application. But for the purposes of this project, it provides a more interesting example than simply using a built-in R dataset like mtcars.
+
+## Data {.smaller}
+
+The data was sourced from the [City of Ballarat Data Exchange]("https://data.ballarat.vic.gov.au/explore/"), which allows access to various weather sensors located at the rowing course at Lake Wendouree such as temperature, pressure, wind measurements etc. 
+
+Data was recorded at each sensor every 15 minutes, but not at the same 15 minute marks and not consistently across all sensors. Therefore, in order to use complete cases for the model, lots of records had to be removed. Similarly, obvious error values such as -9999 for temperature and blank or incorrect 0 values were removed. Data were aggregated to the hour mark to account for the discrepancy in 15 minute timestamps, providing values for all independent variables at each hour. Therefore the model was fit with data from a period in 2020 and a period in 2023 where there was complete data across all of the sensors. For an unknown reason, this excluded data from September, October and November (Spring). 
+
+## Linear regression model {.smaller}
+
+Various linear regression models, predicting air temperature, were explored using forward stepwise regression. The final model used the below variables and met the required assumptions when diagnostics were explored.
+The adjusted R-squared for the chosen model was 0.95.
+
+Air temperature, predicted by:
+
+- Relative humidity (%)
+- Atmospheric pressure (Pa)
+- Vapour pressure (Pa)
+- Average wind speed (km/h)
+- Wind direction (°)
+- Time of day (banded into early morning, morning, noon, evening and night)
+- Season (excluding Spring, as per previous slide)
 
 
 
 
-## Data
+## Chart {.smaller}
+
+One of the most predictive variables was relative humidity, so this is shown against air temperature in the following plot. 
+As would be expected, colouring the points by season shows that the lowest humidities and hottest temperatures occurred in summer.
 
 
-## Chart
+```{r, echo = FALSE, warning=FALSE}
+source(here::here("Shiny/Packages.R"))
+
+## Load data
+data <-
+    read_csv(here("Data/Ballarat/Clean/data.csv"))
+
+## Create scatter plot
+data %>%
+    ggplot(aes(x = relative_humidity, y = air_temperature, colour = season)) +
+    geom_point() + 
+    labs(
+        x = "Relative humidity (%)",
+        y = "Air temperature (°C)"
+    )
+
+```
 
 
 
 ## Links
 
+Please use these links to access the app and for the github repository.
+
+- [R Shiny web application]()
+- [GitHub repository](https://github.com/alexjhall/DevelopingDataProducts)
+    - Contains data sourcing and cleaning
+    - model exploration
+    - shiny R scripts: ui.R and server.R
+    - these slides
 
 
 
@@ -27,24 +82,5 @@ format: revealjs
 
 
 
-
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
-
-## Bullets
-
-When you click the **Render** button a document will be generated that includes:
-
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
 
 
