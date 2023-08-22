@@ -1,7 +1,48 @@
 ## Scratchpad file
 
 
+## Looking to check expected ranges and starting value for shiny app.
+
+## Load data
+data <-
+    read_csv(here("Data/Ballarat/Clean/data.csv"))
+
+hist(data$wind_speed_average)
+summary(data$wind_speed_average)
+
+
+hist(data$vapour_pressure)
+summary(data$vapour_pressure)
+
+
+hist(data$atmospheric_pressure)
+summary(data$atmospheric_pressure)
+
+
+hist(data$relative_humidity)
+summary(data$relative_humidity)
+
+hist(data$time_of_day)
+summary(data$time_of_day)
+
+unique(data$time_of_day)
+    
+        
+hist(data$wind_direction)
+summary(data$wind_direction)
+
+
+
+
+
+
+
+
+
+
 ## Looking at Ballarat data and required cleaning.
+
+
 
 ## ******************************************
 ## Air pressure
