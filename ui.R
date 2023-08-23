@@ -107,6 +107,8 @@ fluidPage(
             
             ## Predicted temperature
             h2("Predicted temperature according to selected inuputs:"),
+            p("Please allow 5-10 seconds for the temperature values to load when first opening the app, and after each
+              selection"),
             p(
                 textOutput("predictedTemp", inline = T),
                 "°C",
